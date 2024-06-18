@@ -4,14 +4,15 @@
 
 int main(int argc, char *argv[])
 {
-    if(argc < 4)
+    if(argc < 5)
     {
-        printf("Usage: %s <intput file> <cut head size> <output file>\n", argv[0]);
+        printf("Usage: %s <intput file> <cut pos> <cut size> <output file>\n", argv[0]);
         return 0;
     }
     char *input_filename = argv[1];
-    int cut_file_size = atoi(argv[2]);
-    char *output_filename = argv[3];
+    unsigned long pos = atoi(argv[2]);
+    int cut_file_size = atoi(argv[3]);
+    char *output_filename = argv[4];
 
     FILE *fpin = fopen(input_filename, "rb");
     char *buf = calloc(cut_file_size, 1);
@@ -22,6 +23,7 @@ int main(int argc, char *argv[])
         goto exit;
     }
 
+    fseek(fpin, pos, SEEK_SET);
     int read_cnt = fread(buf, 1, cut_file_size, fpin);
     fwrite(buf, 1, read_cnt, fpout);
 
